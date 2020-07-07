@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Corona Widget</string>
+    <string name="Heading">CORONAVIRUS DATA</string>
+    <string name="total_case">TOTAL CASES</string>
+
+    <string name="button">Button</string>
+    <string name="country">INDIA</string>
+    <string name="date">Date</string>
+    <string name="recovered">TOTAL RECOVERED</string>
+    <string name="death">TOTAL DEATH</string>
+    <string name="source">Source: covid19india.org</string>
+    <string name="conclusion">Thank You for using our app!</string>
+    <string name="creator">Creator: Kundan Jha</string>
+
+
+
+</resources>
