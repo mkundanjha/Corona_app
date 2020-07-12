@@ -16,7 +16,7 @@ public class YourMakerView extends MarkerView {
     String oldDate="2020-01-30";
     private TextView tvContent;
     private TextView tvContent2;
-    MainActivity dateValue=new MainActivity();
+    GraphActivity dateValue=new GraphActivity();
     ArrayList<String> listDate=new ArrayList<String>(dateValue.date);
 
     public YourMakerView(Context context, int layoutResource) {

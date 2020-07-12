@@ -1,11 +1,19 @@
 package com.example.coronawidget;
 
 import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.android.volley.Request;
@@ -30,11 +38,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.PublicKey;
 import java.text.DecimalFormat;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
+import java.util.*;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,19 +56,45 @@ public class MainActivity extends AppCompatActivity {
     public TextView dailyRecoveredView;
     public TextView dailyDeathView;
     public TextView dateView;
-    LineChart chart;
-    ArrayList<Entry> tCaseData=new ArrayList<>();
+    public TextView wTCaseView;
+    public TextView wTRecView;
+    public TextView wTDeathView;
+    public TextView wDCaseView;
+    public TextView wDRecView;
+    public TextView wDDeathView;
+    public TextView tCountry1;
+    public TextView tCountry1Data;
+    public TextView tCountry2;
+    public TextView tCountry2Data;
+    public TextView tCountry3;
+    public TextView tCountry3Data;
+    public TextView topCountries;
+
+    public ImageView redDot;
+    public ImageView yellowDot;
+    public ImageView greenDot;
+
+//    LineChart chart;
+//    ArrayList<Entry> tCaseData=new ArrayList<>();
+//    ArrayList<Entry> tRecoveredData=new ArrayList<>();
+//    ArrayList<Entry> tDeathData=new ArrayList<>();
+
     ArrayList<String> date=new ArrayList<String>();
-
-    String[] dta=new String[50];
-
-
+    ArrayList<Integer> activeWorld=new ArrayList<Integer>();
+    HashMap<Integer,String> activeWCase=new HashMap<>();
 
 
-    int year = Calendar.getInstance().get(Calendar.YEAR);
+    public Button showGraph;
 
 
-    String url = "https://api.covid19india.org/data.json";
+
+
+
+
+
+
+//    String url = "https://api.covid19india.org/data.json";
+    String url = "https://api.covid19api.com/summary";
 
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
@@ -69,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queue= Volley.newRequestQueue(this);
-        queue2=Volley.newRequestQueue(this);
+
         totalCaseView=findViewById(R.id.textView2);
         totalRecoveredView=findViewById(R.id.textView6);
         totalDeathView=findViewById(R.id.textView7);
@@ -77,24 +110,106 @@ public class MainActivity extends AppCompatActivity {
         dailyRecoveredView=findViewById(R.id.textView8);
         dailyDeathView=findViewById(R.id.textView9);
         dateView=findViewById(R.id.textView12);
+        wTCaseView=findViewById(R.id.textView19);
+        wTRecView=findViewById(R.id.textView20);
+        wTDeathView=findViewById(R.id.textView21);
+        wDCaseView=findViewById(R.id.textView22);
+        wDRecView=findViewById(R.id.textView23);
+        wDDeathView=findViewById(R.id.textView24);
 
-        chart=findViewById(R.id.linechart1);
+        tCountry1=findViewById(R.id.textView37);
+        tCountry1Data=findViewById(R.id.textView40);
+        tCountry2=findViewById(R.id.textView38);;
+        tCountry2Data=findViewById(R.id.textView41);
+        tCountry3=findViewById(R.id.textView39);
+        tCountry3Data=findViewById(R.id.textView42);
+        topCountries=findViewById(R.id.textView43);
+
+        redDot=findViewById(R.id.imageView2);
+        yellowDot=findViewById(R.id.imageView3);
+        greenDot=findViewById(R.id.imageView4);
 
 
-        fetch();
 
+//        chart=findViewById(R.id.linechart1);
+        showGraph=findViewById(R.id.button);
+        redDot.setVisibility(View.INVISIBLE);
+        yellowDot.setVisibility(View.INVISIBLE);
+        greenDot.setVisibility(View.INVISIBLE);
+        showGraph.setVisibility(View.INVISIBLE);
 
+//        installListener();
 
-//        Toast.makeText(this, vdata, Toast.LENGTH_SHORT).show();
+        if(CheckNetwork.isInternetAvailable(MainActivity.this)) //returns true if internet available
+        {
+            fetch();
+            showGraph.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goGraph();
+                }
+            });
 
-//        setGraphData();
-//        createGraph();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this,"No Internet Connection",1000).show();
+        }
 
 
 
 
 
     }
+
+    public void goGraph(){
+        Intent intent=new Intent(getApplicationContext(),GraphActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+    private void installListener() {
+        BroadcastReceiver broadcastReceiver = null;
+
+        if (broadcastReceiver == null) {
+
+            broadcastReceiver = new BroadcastReceiver() {
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    Bundle extras = intent.getExtras();
+
+                    NetworkInfo info = (NetworkInfo) extras
+                            .getParcelable("networkInfo");
+
+                    NetworkInfo.State state = info.getState();
+                    Log.d("InternalBroadcastReceiver", info.toString() + " "
+                            + state.toString());
+
+                    if (state == NetworkInfo.State.CONNECTED) {
+
+                        fetch();
+                        goGraph();
+
+                    } else {
+
+                        Toast.makeText(MainActivity.this,"No Internet COnnection",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            };
+
+            final IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(broadcastReceiver, intentFilter);
+        }
+    }
+
+
+
 
 
 
@@ -104,62 +219,103 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    tCaseData.clear();
-                    String tValue="a";
 
-                    JSONArray jsonArray = response.getJSONArray("cases_time_series");
+//
+                    String date="";
+                    String year="";
+                    String time="";
+
+                    JSONObject jsonObject=response.getJSONObject("Global");
+
+
+
+//                    World Data :
+                    String wCase=jsonObject.getString("TotalConfirmed");
+                    String wRec=jsonObject.getString("TotalRecovered");
+                    String wDeath=jsonObject.getString("TotalDeaths");
+                    String wDCase=jsonObject.getString("NewConfirmed");
+                    String wDRec=jsonObject.getString("NewRecovered");
+                    String wDDeath=jsonObject.getString("NewDeaths");
+
+                    startCountAnimation(Integer.parseInt(wCase),wTCaseView);
+                    startCountAnimation(Integer.parseInt(wRec),wTRecView);
+                    startCountAnimation(Integer.parseInt(wDeath),wTDeathView);
+                    startCountAnimationDcase(Integer.parseInt(wDCase),wDCaseView);
+                    startCountAnimationDcase(Integer.parseInt(wDRec),wDRecView);
+                    startCountAnimationDcase(Integer.parseInt(wDDeath),wDDeathView);
+
+                    JSONArray jsonArray=response.getJSONArray("Countries");
+
+
+                    int activePerCountry;
 
                     for(int i=0;i<jsonArray.length();i++){
-                        JSONObject tCaseGraphData=jsonArray.getJSONObject(i);
-                        tValue=tCaseGraphData.getString("totalconfirmed");
-                        date.add(tCaseGraphData.getString("date"));
-//
-                        tCaseData.add(new Entry(i,Float.parseFloat(tValue)/100000));
-//
+                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
 
+                        activePerCountry=Integer.parseInt(jsonObject1.getString("TotalConfirmed"))
+                                -Integer.parseInt(jsonObject1.getString("TotalRecovered"))
+                                -Integer.parseInt(jsonObject1.getString("TotalDeaths"));
+
+                        activeWCase.put(activePerCountry,jsonObject1.getString("Country"));
+                        activeWorld.add(activePerCountry);
+
+
+
+
+
+
+                        if(jsonObject1.getString("CountryCode").equals("IN")){
+                            startCountAnimation(Integer.parseInt(jsonObject1.getString("TotalConfirmed")),
+                                    totalCaseView);
+                            startCountAnimation(Integer.parseInt(jsonObject1.getString("TotalRecovered")),
+                                    totalRecoveredView);
+                            startCountAnimation(Integer.parseInt(jsonObject1.getString("TotalDeaths")),
+                                    totalDeathView);
+                            startCountAnimationDcase(Integer.parseInt(jsonObject1.getString("NewConfirmed")),
+                                    dailyConfirmedView);
+                            startCountAnimationDcase(Integer.parseInt(jsonObject1.getString("NewRecovered")),
+                                    dailyRecoveredView);
+                            startCountAnimationDcase(Integer.parseInt(jsonObject1.getString("NewDeaths")),
+                                    dailyDeathView);
+                        }
                     }
 
 
+                    Collections.sort(activeWorld);
+                    runAnimation(redDot,1000);
+                    runAnimation(yellowDot,1200);
+                    runAnimation(greenDot,1400);
+                    runAnimation(showGraph,500);
 
+                    runAnimation(topCountries,500);
+                    topCountries.setText("Top 3 Countries With Most Active Cases");
+                    runAnimation(tCountry1,1000);
+                    tCountry1.setText(activeWCase.get(activeWorld.get(activeWorld.size()-1)));
+                    runAnimation(tCountry2,1200);
+                    tCountry2.setText(activeWCase.get(activeWorld.get(activeWorld.size()-2)));
+                    runAnimation(tCountry3,1400);
+                    tCountry3.setText(activeWCase.get(activeWorld.get(activeWorld.size()-3)));
+                    runAnimation(tCountry1Data,1000);
+                    startCountAnimation(activeWorld.get(activeWorld.size()-1),tCountry1Data);
+                    runAnimation(tCountry2Data,1200);
+                    startCountAnimation(activeWorld.get(activeWorld.size()-2),tCountry2Data);
+                    runAnimation(tCountry3Data,1400);
+                    startCountAnimation(activeWorld.get(activeWorld.size()-3),tCountry3Data);
 
-
-
-
-                    JSONObject latestData=jsonArray.getJSONObject(jsonArray.length()-1);
-
-                    String totalCase=latestData.getString("totalconfirmed");
-                    String totalRecovered=latestData.getString("totalrecovered");
-                    String totalDeath=latestData.getString("totaldeceased");
-                    String dailyConfirmed=latestData.getString("dailyconfirmed");
-                    String dailyRecovered=latestData.getString("dailyrecovered");
-                    String dailyDeath=latestData.getString("dailydeceased");
-                    String date=latestData.getString("date");
-
-
-//                    String tCase=format(Integer.valueOf(totalCase));
-//                    String tRec=format(Integer.valueOf(totalRecovered));
-//                    String tDeath=format(Integer.valueOf(totalDeath));
-//                    String dCase=format(Integer.valueOf(dailyConfirmed));
-//                    String dRec=format(Integer.valueOf(dailyRecovered));
-//                    String dDeath=format(Integer.valueOf(dailyDeath));
-
-//                    vdata=tCase;
-                    startCountAnimation(Integer.parseInt(totalCase),totalCaseView);
-                    startCountAnimation(Integer.parseInt(totalRecovered),totalRecoveredView);
-                    startCountAnimation(Integer.parseInt(totalDeath),totalDeathView);
-                    startCountAnimation(Integer.parseInt(totalCase),totalCaseView);
-//                    totalCaseView.setText(tCase);
-//                    totalRecoveredView.setText(tRec);
-//                    totalDeathView.setText(tDeath);
-                    startCountAnimationDcase(Integer.parseInt(dailyConfirmed),dailyConfirmedView);
-                    startCountAnimationDcase(Integer.parseInt(dailyDeath),dailyDeathView);
-                    startCountAnimationDcase(Integer.parseInt(dailyRecovered),dailyRecoveredView);
-//                    dailyConfirmedView.setText("+ "+dCase);
-//                    dailyRecoveredView.setText("+ "+dRec);
-//                    dailyDeathView.setText("+ "+dDeath);
-                    dateView.setText("as on "+date+", "+year);
-
-                    createGraph(3,"Total Confirmed Cases",Integer.parseInt(totalCase)/100000);
+//                    Setting the date
+                    date=response.getString("Date");
+                    int count=0;
+                    for(int i=0; i<date.length();i++){
+                        if(Character.compare(date.charAt(i), 'T')==0) {
+                            break;}
+                            year=year+date.charAt(i);
+                            count++;
+                    }
+                    for(int i=count+1;i<date.length()-4;i++){
+                        time=time+date.charAt(i);
+                    }
+                    runAnimation(dateView,1600);
+                    dateView.setText("last updated on "+year+"  T: "+time);
 
                 }catch (JSONException e){
                     e.printStackTrace();
@@ -176,7 +332,22 @@ public class MainActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-//    #########################################################################################################
+//////////////////
+
+    private void runAnimation(View t,long delay)
+    {
+        Animation a = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        a.reset();
+        a.setStartOffset(delay);
+        t.setVisibility(View.VISIBLE);
+        t.clearAnimation();
+
+        t.startAnimation(a);
+    }
+
+
+
+    //    #########################################################################################################
     public static String format(float value) {
         if(value < 1000) {
             return format("###", value);
@@ -225,62 +396,79 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void createGraph(int graphWidth,String description,int yaxis){
-
-
-        XAxis xAxis=chart.getXAxis();
-
-        xAxis.setDrawGridLines(false);      // remove vertical grid lines
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);      // set bottom x-axis
-        xAxis.setTextColor(Color.GRAY);
-    //    xAxis.setAxisMaximum(170f);
-        xAxis.setAxisLineWidth(2);
-
-
-
-
-        YAxis yAxis3=chart.getAxisLeft();
-        yAxis3.setTextColor(Color.GRAY);
-        yAxis3.setAxisMaximum(yaxis+1);
-        yAxis3.setAxisMinimum(0f);
-        yAxis3.setAxisLineWidth(2);
-
-
-        //      Chart Properties
-        chart.getAxisRight().setEnabled(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.setScaleEnabled(false);
-
-
-        LineDataSet set = new LineDataSet(tCaseData, description);
-
-        set.setFillAlpha(30);
-        set.setDrawCircles(false);
-    //    set.setCircleRadius((float) 0.3);
-        set.setDrawValues(true);
-        set.setColor(Color.parseColor("#e84d4a"));
-        set.setLineWidth(graphWidth);
-
-
-        ArrayList<ILineDataSet> dataSets=new ArrayList<>();
-        dataSets.add(set);
-
-        LineData data=new LineData(dataSets);
-
-        chart.setData(data);
-        chart.setTouchEnabled(true);
+//    public static void createGraph(int graphWidth, String description, int yaxis){
 //
-        chart.getDescription().setEnabled(false);
-        chart.getDescription().setTextSize(9);
+//
+//        XAxis xAxis=chart.getXAxis();
+//
+//        xAxis.setDrawGridLines(false);      // remove vertical grid lines
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);      // set bottom x-axis
+//        xAxis.setTextColor(Color.GRAY);
+//    //    xAxis.setAxisMaximum(170f);
+//        xAxis.setAxisLineWidth(2);
+//
+//
+//
+//
+//        YAxis yAxis3=chart.getAxisLeft();
+//        yAxis3.setTextColor(Color.GRAY);
+//        yAxis3.setAxisMaximum(yaxis+1);
+//        yAxis3.setAxisMinimum(0f);
+//        yAxis3.setAxisLineWidth(2);
+//
+//
+//        //      Chart Properties
+//        chart.getAxisRight().setEnabled(false);
+//        chart.getAxisLeft().setDrawGridLines(false);
+//        chart.setScaleEnabled(false);
+//        chart.getLegend().setTextColor(Color.WHITE);
+//
+//
+//        LineDataSet set = new LineDataSet(tCaseData, description);
+//
+//        set.setFillAlpha(30);
+//        set.setDrawCircles(false);
+//        set.setDrawValues(true);
+//        set.setColor(Color.parseColor("#573285"));
+//        set.setLineWidth(graphWidth);
+//
+//        LineDataSet set2=new LineDataSet(tRecoveredData,"Total Recovered");
+//        set2.setFillAlpha(30);
+//        set2.setDrawCircles(false);
+//        set2.setDrawValues(true);
+//        set2.setColor(Color.parseColor("#339e6a"));
+//        set2.setLineWidth(graphWidth);
+//
+//        LineDataSet set3=new LineDataSet(tDeathData,"Total Death");
+//        set3.setFillAlpha(30);
+//        set3.setDrawCircles(false);
+//        set3.setDrawValues(true);
+//        set3.setColor(Color.parseColor("#a13a52"));
+//        set3.setLineWidth(graphWidth);
+//
+//
+//
+//        ArrayList<ILineDataSet> dataSets=new ArrayList<>();
+//        dataSets.add(set);
+//        dataSets.add(set2);
+//        dataSets.add(set3);
+//
+//        LineData data=new LineData(dataSets);
+//
+//        chart.setData(data);
+//        chart.setTouchEnabled(true);
+////
+//        chart.getDescription().setEnabled(false);
+//
+//
+//        IMarker marker=new YourMakerView(getApplicationContext(),R.layout.contentview);
+//        chart.setMarker(marker);
+//        chart.animateX(900);
+//
+//
+//}
 
-        IMarker marker=new YourMakerView(getApplicationContext(),R.layout.contentview);
-        chart.setMarker(marker);
-        chart.animateX(900);
-
-
-}
-
-private void startCountAnimation(int leng, final TextView view){
+public static void startCountAnimation(int leng, final TextView view){
     final ValueAnimator animator=ValueAnimator.ofInt(0,leng);
     animator.setDuration(1000);
     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -292,7 +480,7 @@ private void startCountAnimation(int leng, final TextView view){
     animator.start();
 }
 
-    private void startCountAnimationDcase(int leng, final TextView view){
+    public static void startCountAnimationDcase(int leng, final TextView view){
         final ValueAnimator animator=ValueAnimator.ofInt(0,leng);
         animator.setDuration(1000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

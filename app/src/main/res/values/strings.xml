@@ -3,15 +3,31 @@
     <string name="Heading">CORONAVIRUS DATA</string>
     <string name="total_case">TOTAL CASES</string>
 
-    <string name="button">Button</string>
+
     <string name="country">INDIA</string>
     <string name="date">Date</string>
     <string name="recovered">TOTAL RECOVERED</string>
-    <string name="death">TOTAL DEATH</string>
+    <string name="death">TOTAL DEATHS</string>
     <string name="source">Source: covid19india.org</string>
     <string name="conclusion">Thank You for using our app!</string>
     <string name="creator">Creator: Kundan Jha</string>
-
+    <string name="button">Button</string>
+    <string name="heding">heding</string>
+    <string name="textview1">TextView</string>
+    <string name="textview2">TextView</string>
+    <string name="coronvirus_graphical_data">Coronvirus Graphical Data</string>
+    <string name="textview3">TextView</string>
+    <string name="textview4">TextView</string>
+    <string name="textview5">TextView</string>
+    <string name="total_active">Total Active</string>
+    <string name="total_confirmed">Total Confirmed</string>
+    <string name="total_recovered">Total Recovered</string>
+    <string name="total_death">Total Death</string>
+    <string name="india">INDIA</string>
+    <string name="textViewWorld">WORLD</string>
+    <string name="textViewtCase">Total Confirmed</string>
+    <string name="textViewtRec">Total Recovered</string>
+    <string name="textViewtDeath">Total Deaths</string>
 
 
 </resources>
