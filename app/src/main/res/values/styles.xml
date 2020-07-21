@@ -6,6 +6,42 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="backgroundcolor">@color/darkBlue</item>
+        <item name="headercolor">@color/lighterRed</item>
+        <item name="textcolor">#fff</item>
+        <item name="button">#243e69</item>
+        <item name="tbutton">#faf5f7</item>
+        <item name="titleColor">#bdbfbe</item>
     </style>
+
+    <!--Light Mode-->
+    <style name="LightMode" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="backgroundcolor">#fff</item>
+        <item name="headercolor">@color/lighterRed</item>
+        <item name="textcolor">#3d3d3d</item>
+
+        <item name="button">#7da0d4</item>
+        <item name="tbutton">#485261</item>
+        <item name="titleColor">#156b39</item>
+        
+        
+    </style>
+
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#46bdbf</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#f1f1f1
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#42221f1f
+        </item>
+    </style>
+
 
 </resources>

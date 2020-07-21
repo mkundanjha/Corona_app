@@ -56,11 +56,23 @@ public class GraphActivity extends AppCompatActivity {
     ArrayList<Entry> tDeathData=new ArrayList<>();
     ArrayList<Entry> tActiveData=new ArrayList<>();
 
+    ArrayList<String> list;
+
     ArrayList<String> date=new ArrayList<String>();
+    SharedPre sharedprep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
+        sharedprep=new SharedPre(this);
+        if(sharedprep.loadNightModeState()==true){
+            setTheme(R.style.AppTheme);
+        }else {
+            setTheme(R.style.LightMode);
+        }
         setContentView(R.layout.graph_activity);
 
         queue= Volley.newRequestQueue(this);
@@ -78,6 +90,9 @@ public class GraphActivity extends AppCompatActivity {
         goBar=findViewById(R.id.button3);
 
         fetch();
+
+
+
         goBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +143,8 @@ public class GraphActivity extends AppCompatActivity {
                         tValue=tCaseGraphData.getString("totalconfirmed");
                         tRec=tCaseGraphData.getString("totalrecovered");
                         tDeath=tCaseGraphData.getString("totaldeceased");
+
+                        list.add(tValue);
 
                         tRecoveredData.add(new Entry(i,Float.parseFloat(tRec)/100000));
                         tDeathData.add(new Entry(i,Float.parseFloat(tDeath)/1000));
@@ -183,6 +200,8 @@ public class GraphActivity extends AppCompatActivity {
 
             }
         });
+
+        list=new ArrayList<>();
         queue.add(jsonObjectRequest);
     }
 
@@ -223,15 +242,21 @@ public class GraphActivity extends AppCompatActivity {
         xAxis.setTextColor(Color.GRAY);
         //    xAxis.setAxisMaximum(170f);
         xAxis.setAxisLineWidth(2);
+        xAxis.setDrawAxisLine(true);
+       xAxis.setDrawGridLines(true);
+
 
 
 
 
         YAxis yAxis3=chart.getAxisLeft();
         yAxis3.setTextColor(Color.GRAY);
+        yAxis3.setDrawGridLines(true);
+
         yAxis3.setAxisMaximum(yaxis+1);
         yAxis3.setAxisMinimum(0f);
         yAxis3.setAxisLineWidth(2);
+
 
 
         //      Chart Properties
@@ -239,6 +264,7 @@ public class GraphActivity extends AppCompatActivity {
         chart.getAxisLeft().setDrawGridLines(false);
         chart.setScaleEnabled(false);
         chart.getLegend().setTextColor(Color.WHITE);
+
 
 
         LineDataSet set = new LineDataSet(tCaseData, description);
@@ -250,11 +276,13 @@ public class GraphActivity extends AppCompatActivity {
         set.setLineWidth(graphWidth);
 
 
+
         ArrayList<ILineDataSet> dataSets=new ArrayList<>();
         dataSets.add(set);
 
 
         LineData data=new LineData(dataSets);
+
 
         chart.setData(data);
         chart.setTouchEnabled(true);
@@ -265,6 +293,7 @@ public class GraphActivity extends AppCompatActivity {
         IMarker marker=new YourMakerView(getApplicationContext(),R.layout.contentview);
         chart.setMarker(marker);
         chart.animateX(900);
+
 
     }
 

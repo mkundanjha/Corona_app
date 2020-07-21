@@ -1,10 +1,7 @@
 package com.example.coronawidget;
 
 import android.animation.ValueAnimator;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.Color;
 import android.media.Image;
 import android.net.ConnectivityManager;
@@ -14,6 +11,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.android.volley.Request;
@@ -44,7 +42,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity<SharedPref> extends AppCompatActivity {
 
     private RequestQueue queue;
     private RequestQueue queue2;
@@ -84,8 +82,16 @@ public class MainActivity extends AppCompatActivity {
     HashMap<Integer,String> activeWCase=new HashMap<>();
 
 
-    public Button showGraph;
+//    public Button showGraph;
+    public ImageButton showGraph;
+    public ImageButton showTable;
+    public ImageButton showSearch;
+    public ImageButton showCreator;
 
+    AlertDialog.Builder builder;
+
+    private Switch myswitch;
+    SharedPre sharedprep;
 
 
 
@@ -98,8 +104,36 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
+        sharedprep=new SharedPre(this);
+        if(sharedprep.loadNightModeState()==true){
+            setTheme(R.style.AppTheme);
+        }else {
+        setTheme(R.style.LightMode);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myswitch=findViewById(R.id.switch1);
+        if (sharedprep.loadNightModeState()==true) {
+            myswitch.setChecked(true);
+        }
+        myswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    sharedprep.setNightModeState(true);
+                    restartApp();
+                }
+                else {
+                    sharedprep.setNightModeState(false);
+                    restartApp();
+                }
+            }
+        });
+
+
+
+
 
         queue= Volley.newRequestQueue(this);
 
@@ -129,14 +163,23 @@ public class MainActivity extends AppCompatActivity {
         yellowDot=findViewById(R.id.imageView3);
         greenDot=findViewById(R.id.imageView4);
 
+//        showGraph=(ImageButton) findViewById(R.id.imageView3);
+        showGraph=findViewById(R.id.imageButton3);
+        showTable=findViewById(R.id.imageButton4);
+        showSearch=findViewById(R.id.imageButton5);
+        showCreator=findViewById(R.id.imageButton2);
+        builder=new AlertDialog.Builder(this);
 
 
-//        chart=findViewById(R.id.linechart1);
-        showGraph=findViewById(R.id.button);
+
         redDot.setVisibility(View.INVISIBLE);
         yellowDot.setVisibility(View.INVISIBLE);
         greenDot.setVisibility(View.INVISIBLE);
-        showGraph.setVisibility(View.INVISIBLE);
+//        showGraph.setVisibility(View.INVISIBLE);
+//        showTable.setVisibility(View.INVISIBLE);
+//        showSearch.setVisibility(View.INVISIBLE);
+//        showCreator.setVisibility(View.INVISIBLE);
+
 
 //        installListener();
 
@@ -147,6 +190,35 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     goGraph();
+                }
+            });
+            showTable.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goTable();
+                }
+            });
+
+            showCreator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    builder.setMessage("Thank you for using our app!\nThis app is designed to show the live data of Coronavirus spread around the world.\nStay home and stay safe.\nLet's fight this pandemic together.\n\nDeveloper: Kundan Jha\nMail: kundanjha38@gmail.com\nPlease contact for any query!!\n\nSource:\ncovid19api.com\ncovid19india.org ")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                    AlertDialog alert=builder.create();
+                    alert.setTitle("App Info");
+                    alert.show();
+                }
+            });
+            showSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goWorldActivity();
                 }
             });
 
@@ -161,6 +233,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void restartApp () {
+        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+    public void goWorldActivity(){
+        Intent intent=new Intent(getApplicationContext(),Main2Activity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     public void goGraph(){
         Intent intent=new Intent(getApplicationContext(),GraphActivity.class);
@@ -168,47 +251,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
 
     }
-
-    private void installListener() {
-        BroadcastReceiver broadcastReceiver = null;
-
-        if (broadcastReceiver == null) {
-
-            broadcastReceiver = new BroadcastReceiver() {
-
-                @Override
-                public void onReceive(Context context, Intent intent) {
-
-                    Bundle extras = intent.getExtras();
-
-                    NetworkInfo info = (NetworkInfo) extras
-                            .getParcelable("networkInfo");
-
-                    NetworkInfo.State state = info.getState();
-                    Log.d("InternalBroadcastReceiver", info.toString() + " "
-                            + state.toString());
-
-                    if (state == NetworkInfo.State.CONNECTED) {
-
-                        fetch();
-                        goGraph();
-
-                    } else {
-
-                        Toast.makeText(MainActivity.this,"No Internet COnnection",Toast.LENGTH_SHORT).show();
-
-                    }
-
-                }
-            };
-
-            final IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(broadcastReceiver, intentFilter);
-        }
-    }
-
-
 
 
 
@@ -285,7 +327,10 @@ public class MainActivity extends AppCompatActivity {
                     runAnimation(redDot,1000);
                     runAnimation(yellowDot,1200);
                     runAnimation(greenDot,1400);
-                    runAnimation(showGraph,500);
+//                    runAnimation(showGraph,200);
+//                    runAnimation(showTable,400);
+//                    runAnimation(showSearch,600);
+//                    runAnimation(showCreator,800);
 
                     runAnimation(topCountries,500);
                     topCountries.setText("Top 3 Countries With Most Active Cases");
@@ -371,6 +416,12 @@ public class MainActivity extends AppCompatActivity {
     private static String format(String pattern, Object value) {
 
         return new DecimalFormat(pattern).format(value);
+    }
+
+    public void goTable(){
+        Intent intent=new Intent(this,StateDataTableActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

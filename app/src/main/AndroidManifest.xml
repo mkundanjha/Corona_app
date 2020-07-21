@@ -16,9 +16,20 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             >
-        <activity android:name=".BarActivity">
+        <activity
+                android:name=".Main2Activity"
+                android:screenOrientation="portrait"
+                >
         </activity>
-        <activity android:name=".SplashActivity">
+        <activity
+                android:name=".StateDataTableActivity"
+                android:screenOrientation="portrait"
+                >
+        </activity>
+        <activity
+                android:name=".BarActivity"
+                android:screenOrientation="portrait"
+                >
         </activity>
         <activity
                 android:name=".GraphActivity"
@@ -28,6 +39,7 @@
         <activity
                 android:name=".MainActivity"
                 android:screenOrientation="portrait"
+
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
