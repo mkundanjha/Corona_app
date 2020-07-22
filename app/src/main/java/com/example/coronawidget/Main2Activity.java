@@ -2,15 +2,13 @@ package com.example.coronawidget;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.support.v4.app.INotificationSideChannel;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.android.volley.Request;
@@ -44,6 +42,7 @@ public class Main2Activity extends AppCompatActivity {
 
     String url = "https://api.covid19api.com/summary";
     SharedPre sharedprep;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +61,14 @@ public class Main2Activity extends AppCompatActivity {
         title=findViewById(R.id.textView55);
 
         title.setVisibility(View.VISIBLE);
+        back=findViewById(R.id.imageButton6);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         queue= Volley.newRequestQueue(this);
         fetch();
@@ -143,27 +149,28 @@ public class Main2Activity extends AppCompatActivity {
             TableRow tbrow0 = new TableRow(this);
             TextView tv0 = new TextView(this);
             tv0.setText("Countries");
-            tv0.setTextColor(Color.parseColor("#965150"));
+            tv0.setTextColor(Color.parseColor("#b52f2f"));
             tv0.setTextSize(22);
+            tv0.setPadding(30,0,0,0);
             tbrow0.addView(tv0);
             TextView tv1 = new TextView(this);
             tv1.setText("T.");
             tv1.setGravity(Gravity.CENTER);
             tv1.setTextSize(22);
-            tv1.setTextColor(Color.parseColor("#965150"));
+            tv1.setTextColor(Color.parseColor("#b52f2f"));
             tbrow0.addView(tv1);
             TextView tv2 = new TextView(this);
             tv2.setText("R.");
             tv2.setTextSize(22);
             tv2.setGravity(Gravity.CENTER);
-            tv2.setTextColor(Color.parseColor("#965150"));
+            tv2.setTextColor(Color.parseColor("#b52f2f"));
             tbrow0.addView(tv2);
             TextView tv3 = new TextView(this);
             tv3.setText("D.");
             tv3.setTextSize(22);
             tv3.setGravity(Gravity.CENTER);
 
-            tv3.setTextColor(Color.parseColor("#965150"));
+            tv3.setTextColor(Color.parseColor("#b52f2f"));
             tbrow0.addView(tv3);
             stk.addView(tbrow0);
 
@@ -190,16 +197,17 @@ public class Main2Activity extends AppCompatActivity {
                     DRec=String.valueOf(dR.get(alist.get(size - i - 1)));
                     DDeath=String.valueOf(dD.get(alist.get(size - i - 1)));
                     String temp="",temp2="";
-                    if(cName.length()>17){
-                        for(int j=0;j<16;j++){
-                            temp=temp+cName.charAt(j);
-                        }
-                        temp=temp+"\n";
-                        for (int w=16;w<cName.length();w++){
-                            temp2=temp2+cName.charAt(w);
-                        }
 
-                        cName=temp+temp2;
+
+
+                    if(cName.equals("United States of America")){
+                        cName="USA";
+                    }
+                    if(cName.equals("Russian Federation")){
+                        cName="Russia";
+                    }
+                    if(cName.equals("Dominican Republic")){
+                        cName="Dominican";
                     }
 
 
@@ -207,7 +215,8 @@ public class Main2Activity extends AppCompatActivity {
                     TextView t1v = new TextView(this);
                     runAnimation(t1v, (4 + i) * 100);
                     t1v.setText(cName);
-                    t1v.setBackground(getDrawable(R.color.lightBlue));
+
+                    t1v.setBackground(getDrawable(R.drawable.top_tablecell_state_name));
                     t1v.setTextColor(Color.WHITE);
                     t1v.setGravity(Gravity.LEFT);
 //                    t1v.setBackground(getDrawable(R.drawable.cell_shape));
@@ -231,7 +240,7 @@ public class Main2Activity extends AppCompatActivity {
                     t4v.setText(format(TDeath));
                     t4v.setTextColor(Color.WHITE);
                     t4v.setGravity(Gravity.RIGHT);
-                    t4v.setBackground((getDrawable(R.drawable.cell_shape)));
+                    t4v.setBackground((getDrawable(R.drawable.lst_top_cell)));
                     tbrow.addView(t4v);
                     stk.addView(tbrow);
 
@@ -240,29 +249,37 @@ public class Main2Activity extends AppCompatActivity {
                     runAnimation(t1, (4 + i) * 100);
                     t1.setText("");
                     tableRow2.addView(t1);
-                    t1.setBackground(getDrawable(R.drawable.state_cell));
+                    t1.setBackground(getDrawable(R.drawable.bottom_tablecell_state_name));
                     TextView t2 = new TextView(this);
                     runAnimation(t2, (4 + i) * 100);
                     t2.setText("+ "+format(DCase));
-                    t2.setTextColor(Color.parseColor("#ad5798"));
+                    t2.setTextColor(Color.BLACK);
                     t2.setGravity(Gravity.RIGHT);
-                    t2.setBackground(getDrawable(R.drawable.state_cell));
+                    t2.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t2);
                     TextView t3 = new TextView(this);
                     runAnimation(t3, (4 + i) * 100);
                     t3.setText("+ "+format(DRec));
-                    t3.setTextColor(Color.parseColor("#ad5798"));
+                    t3.setTextColor(Color.BLACK);
                     t3.setGravity(Gravity.RIGHT);
-                    t3.setBackground(getDrawable(R.drawable.state_cell));
+                    t3.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t3);
                     TextView t4 = new TextView(this);
                     runAnimation(t4, (4 + i) * 100);
                     t4.setText("+ "+format(DDeath));
-                    t4.setTextColor(Color.parseColor("#ad5798"));
+                    t4.setTextColor(Color.BLACK);
                     t4.setGravity(Gravity.RIGHT);
-                    t4.setBackground(getDrawable(R.drawable.state_cell));
+                    t4.setBackground(getDrawable(R.drawable.lst_bottom_cell));
                     tableRow2.addView(t4);
                     stk.addView(tableRow2);
+
+//                    Third Row
+                    TableRow tableRow3=new TableRow(this);
+                    TextView tt=new TextView(this);
+                    tt.setText("");
+
+                    tableRow3.addView(tt);
+                    stk.addView(tableRow3);
 
 
                 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,8 @@ public class GraphActivity extends AppCompatActivity {
     ArrayList<String> date=new ArrayList<String>();
     SharedPre sharedprep;
 
+    ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -88,6 +91,15 @@ public class GraphActivity extends AppCompatActivity {
         tRecoveredChart=findViewById(R.id.line3);
         tDeathChart=findViewById(R.id.line4);
         goBar=findViewById(R.id.button3);
+        back=findViewById(R.id.imageButton7);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 
         fetch();
 
@@ -176,13 +188,13 @@ public class GraphActivity extends AppCompatActivity {
                     dateView.setText("as on "+date+", "+year);
 
                     createGraph(tCaseChart,3,"Total Confirmed Cases",
-                            Integer.parseInt(totalCase)/100000,tCaseData,Color.parseColor("#4753f5"));
+                            Integer.parseInt(totalCase)/100000,tCaseData,Color.parseColor("#1c2cff"));
                     createGraph(tActiveChart,3,"Active Cases",
-                            activValueAxis/100000,tActiveData,Color.parseColor("#963874"));
+                            activValueAxis/100000,tActiveData,Color.parseColor("#d640a0"));
                     createGraph(tRecoveredChart,3,"Total Recovered Case",
-                            Integer.parseInt(totalRecovered)/100000,tRecoveredData,Color.parseColor("#30ba43"));
+                            Integer.parseInt(totalRecovered)/100000,tRecoveredData,Color.parseColor("#2fd445"));
                     createGraph(tDeathChart,3,"Total Death Cases",
-                            Integer.parseInt(totalDeath)/1000,tDeathData,Color.parseColor("#bf303e"));
+                            Integer.parseInt(totalDeath)/1000,tDeathData,Color.parseColor("#ed3b4d"));
 
 
 //                       calling method to create graph

@@ -175,13 +175,7 @@ public class MainActivity<SharedPref> extends AppCompatActivity {
         redDot.setVisibility(View.INVISIBLE);
         yellowDot.setVisibility(View.INVISIBLE);
         greenDot.setVisibility(View.INVISIBLE);
-//        showGraph.setVisibility(View.INVISIBLE);
-//        showTable.setVisibility(View.INVISIBLE);
-//        showSearch.setVisibility(View.INVISIBLE);
-//        showCreator.setVisibility(View.INVISIBLE);
 
-
-//        installListener();
 
         if(CheckNetwork.isInternetAvailable(MainActivity.this)) //returns true if internet available
         {

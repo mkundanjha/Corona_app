@@ -6,12 +6,17 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
-        <item name="backgroundcolor">@color/darkBlue</item>
+        <item name="backgroundcolor">@color/ttt</item>
         <item name="headercolor">@color/lighterRed</item>
         <item name="textcolor">#fff</item>
-        <item name="button">#243e69</item>
+        <item name="button">#1e1e1f</item>
         <item name="tbutton">#faf5f7</item>
         <item name="titleColor">#bdbfbe</item>
+        <item name="dCaseColor">#b9bdbd</item>
+        <item name="tablecolor">#4f4d4d</item>
+        <item name="cardbackground">#0e2338</item>
+        <item name="timecolor">#059653</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
     <!--Light Mode-->
@@ -22,11 +27,14 @@
         <item name="backgroundcolor">#fff</item>
         <item name="headercolor">@color/lighterRed</item>
         <item name="textcolor">#3d3d3d</item>
-
-        <item name="button">#7da0d4</item>
-        <item name="tbutton">#485261</item>
-        <item name="titleColor">#156b39</item>
-        
+        <item name="button">#6be89f</item>
+        <item name="tbutton">#0b9978</item>
+        <item name="titleColor">#2eacb0</item>
+        <item name="dCaseColor">#5d5e5e</item>
+        <item name="tablecolor">#4f4e4e</item>
+        <item name="cardbackground">#fff</item>
+        <item name="timecolor">#3d3d3d</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
         
     </style>
 
@@ -35,12 +43,16 @@
         <item name="colorControlActivated">#46bdbf</item>
 
         <!-- inactive thumb color -->
-        <item name="colorSwitchThumbNormal">#f1f1f1
-        </item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#42221f1f
-        </item>
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation" >@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+
     </style>
 
 

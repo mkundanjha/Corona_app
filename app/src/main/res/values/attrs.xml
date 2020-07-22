@@ -8,6 +8,9 @@
         <attr name="button" format="color"/>
         <attr name="tbutton" format="color"/>
         <attr name="titleColor" format="color"/>
+        <attr name="tablecolor" format="color"/>
+        <attr name="cardbackground" format="color"/>
+        <attr name="timecolor" format="color"/>
 
     </declare-styleable>
 </resources>

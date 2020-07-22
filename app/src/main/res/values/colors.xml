@@ -17,4 +17,5 @@
     <color name="newBlue">#22437a</color>
     <color name="softBlue">#4753f5</color>
     <color name="tabClolour">#243652</color>
+    <color name="ttt">@drawable/gradient_background</color>
 </resources>

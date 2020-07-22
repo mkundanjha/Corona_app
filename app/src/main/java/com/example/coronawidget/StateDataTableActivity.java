@@ -1,17 +1,21 @@
 package com.example.coronawidget;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,14 +34,19 @@ public class StateDataTableActivity extends AppCompatActivity {
     public  TextView dateView;
     String url = "https://api.covid19india.org/data.json";
     SharedPre sharedprep;
+    boolean flag;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedprep=new SharedPre(this);
         if(sharedprep.loadNightModeState()==true){
             setTheme(R.style.AppTheme);
+            flag=true;
+
         }else {
             setTheme(R.style.LightMode);
+            flag=false;
         }
 
 
@@ -45,8 +54,15 @@ public class StateDataTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_state_data_table);
         queue= Volley.newRequestQueue(this);
         dateView=findViewById(R.id.textView43);
+        back=findViewById(R.id.imageButton);
 
         fetch();
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
     }
@@ -67,27 +83,31 @@ public class StateDataTableActivity extends AppCompatActivity {
         TableRow tbrow0 = new TableRow(this);
         TextView tv0 = new TextView(this);
         tv0.setText("States");
-        tv0.setTextColor(Color.parseColor("#965150"));
+        tv0.setPadding(30,0,0,0);
+        tv0.setTextColor(Color.parseColor("#b52f2f"));
+        tv0.setTypeface(Typeface.DEFAULT_BOLD);
         tv0.setTextSize(22);
         tbrow0.addView(tv0);
         TextView tv1 = new TextView(this);
         tv1.setText("T.");
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(22);
-        tv1.setTextColor(Color.parseColor("#965150"));
+        tv1.setTextColor(Color.parseColor("#b52f2f"));
+        tv1.setTypeface(Typeface.DEFAULT_BOLD);
         tbrow0.addView(tv1);
         TextView tv2 = new TextView(this);
         tv2.setText("R.");
         tv2.setTextSize(22);
         tv2.setGravity(Gravity.CENTER);
-        tv2.setTextColor(Color.parseColor("#965150"));
+        tv2.setTextColor(Color.parseColor("#b52f2f"));
+        tv2.setTypeface(Typeface.DEFAULT_BOLD);
         tbrow0.addView(tv2);
         TextView tv3 = new TextView(this);
         tv3.setText("D.");
         tv3.setTextSize(22);
         tv3.setGravity(Gravity.CENTER);
-
-        tv3.setTextColor(Color.parseColor("#965150"));
+        tv3.setTypeface(Typeface.DEFAULT_BOLD);
+        tv3.setTextColor(Color.parseColor("#b52f2f"));
         tbrow0.addView(tv3);
         stk.addView(tbrow0);
 
@@ -119,18 +139,22 @@ public class StateDataTableActivity extends AppCompatActivity {
 
             if(!stateName.equals("State Unassigned")) {
                 if(stateName.equals("Dadra and Nagar Haveli and Daman and Diu"))
-                    stateName="Dadra and \nNagar Haveli and\nDaman and Diu";
+                    stateName="Daman and Diu";
                 if(stateName.equals("Andaman and Nicobar Islands"))
-                    stateName="Andaman and \nNicobar Islands";
+                    stateName="Andaman/Nicobar";
 
                     TableRow tbrow = new TableRow(this);
                     TextView t1v = new TextView(this);
                     runAnimation(t1v,(4+i)*100);
                     t1v.setText(stateName);
-                    t1v.setBackground(getDrawable(R.color.lightBlue));
+
+
+
+                    t1v.setPadding(20,0,0,0);
                     t1v.setTextColor(Color.WHITE);
                     t1v.setGravity(Gravity.LEFT);
-//                    t1v.setBackground(getDrawable(R.drawable.cell_shape));
+
+                    t1v.setBackground(getDrawable(R.drawable.top_tablecell_state_name));
                     tbrow.addView(t1v);
                     TextView t2v = new TextView(this);
                     runAnimation(t2v,(4+i)*100);
@@ -151,7 +175,7 @@ public class StateDataTableActivity extends AppCompatActivity {
                     t4v.setText(format(stateTDeath));
                     t4v.setTextColor(Color.WHITE);
                     t4v.setGravity(Gravity.RIGHT);
-                    t4v.setBackground((getDrawable(R.drawable.cell_shape)));
+                    t4v.setBackground((getDrawable(R.drawable.lst_top_cell)));
                     tbrow.addView(t4v);
                     stk.addView(tbrow);
 
@@ -159,7 +183,7 @@ public class StateDataTableActivity extends AppCompatActivity {
                     TextView t1 = new TextView(this);
                     runAnimation(t1,(4+i)*100);
                     t1.setText("");
-                    t1.setBackground(getDrawable(R.drawable.state_cell));
+                    t1.setBackground(getDrawable(R.drawable.bottom_tablecell_state_name));
                     tableRow2.addView(t1);
 
 
@@ -171,9 +195,9 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t2.setText("");
                     }
-                    t2.setTextColor(Color.parseColor("#ad5798"));
+                    t2.setTextColor(Color.BLACK);
                     t2.setGravity(Gravity.RIGHT);
-                    t2.setBackground(getDrawable(R.drawable.state_cell));
+                    t2.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t2);
 
                     TextView t3 = new TextView(this);
@@ -184,9 +208,9 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t3.setText("");
                     }
-                    t3.setTextColor(Color.parseColor("#ad5798"));
+                    t3.setTextColor(Color.BLACK);
                     t3.setGravity(Gravity.RIGHT);
-                    t3.setBackground(getDrawable(R.drawable.state_cell));
+                    t3.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t3);
 
                     TextView t4 = new TextView(this);
@@ -197,11 +221,19 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t4.setText("");
                     }
-                    t4.setTextColor(Color.parseColor("#ad5798"));
+                    t4.setTextColor(Color.BLACK);
                     t4.setGravity(Gravity.RIGHT);
-                    t4.setBackground(getDrawable(R.drawable.state_cell));
+                    t4.setBackground(getDrawable(R.drawable.lst_bottom_cell));
                     tableRow2.addView(t4);
                     stk.addView(tableRow2);
+
+                    TableRow tableRow3=new TableRow(this);
+                    TextView t=new TextView(this);
+                    t.setText("");
+
+                    tableRow3.addView(t);
+                    stk.addView(tableRow3);
+
 
 
             }
@@ -266,4 +298,6 @@ public class StateDataTableActivity extends AppCompatActivity {
 
         t.startAnimation(a);
     }
+
+
 }
