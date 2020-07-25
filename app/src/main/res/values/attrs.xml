@@ -9,8 +9,11 @@
         <attr name="tbutton" format="color"/>
         <attr name="titleColor" format="color"/>
         <attr name="tablecolor" format="color"/>
-        <attr name="cardbackground" format="color"/>
+        <attr name="cardbackground1" format="color"/>
+        <attr name="cardbackground2" format="color"/>
         <attr name="timecolor" format="color"/>
+        <attr name="tableHeaderColor" format="color"/>
+        <attr name="tableHeaderColor2" format="color"/>
 
     </declare-styleable>
 </resources>

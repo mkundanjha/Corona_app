@@ -3,6 +3,7 @@ package com.example.coronawidget;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -158,11 +160,11 @@ public class GraphActivity extends AppCompatActivity {
 
                         list.add(tValue);
 
-                        tRecoveredData.add(new Entry(i,Float.parseFloat(tRec)/100000));
-                        tDeathData.add(new Entry(i,Float.parseFloat(tDeath)/1000));
+                        tRecoveredData.add(new Entry(i,Float.parseFloat(tRec)));
+                        tDeathData.add(new Entry(i,Float.parseFloat(tDeath)));
                         tActiveData.add(new Entry(i,(Float.parseFloat(tValue)-Float.parseFloat(tDeath)
-                                -Float.parseFloat(tRec))/100000));
-                        tCaseData.add(new Entry(i,Float.parseFloat(tValue)/100000));
+                                -Float.parseFloat(tRec))));
+                        tCaseData.add(new Entry(i,Float.parseFloat(tValue)));
 //
                     }
 
@@ -188,13 +190,13 @@ public class GraphActivity extends AppCompatActivity {
                     dateView.setText("as on "+date+", "+year);
 
                     createGraph(tCaseChart,3,"Total Confirmed Cases",
-                            Integer.parseInt(totalCase)/100000,tCaseData,Color.parseColor("#1c2cff"));
+                            Integer.parseInt(totalCase),tCaseData,Color.parseColor("#20ced4"));
                     createGraph(tActiveChart,3,"Active Cases",
-                            activValueAxis/100000,tActiveData,Color.parseColor("#d640a0"));
+                            activValueAxis,tActiveData,Color.parseColor("#e39b1e"));
                     createGraph(tRecoveredChart,3,"Total Recovered Case",
-                            Integer.parseInt(totalRecovered)/100000,tRecoveredData,Color.parseColor("#2fd445"));
+                            Integer.parseInt(totalRecovered),tRecoveredData,Color.parseColor("#2fd445"));
                     createGraph(tDeathChart,3,"Total Death Cases",
-                            Integer.parseInt(totalDeath)/1000,tDeathData,Color.parseColor("#ed3b4d"));
+                            Integer.parseInt(totalDeath),tDeathData,Color.parseColor("#ed3b4d"));
 
 
 //                       calling method to create graph
@@ -255,8 +257,11 @@ public class GraphActivity extends AppCompatActivity {
         //    xAxis.setAxisMaximum(170f);
         xAxis.setAxisLineWidth(2);
         xAxis.setDrawAxisLine(true);
-       xAxis.setDrawGridLines(true);
-
+       xAxis.setDrawGridLines(false);
+       xAxis.setGranularity(1);
+       xAxis.setValueFormatter(new MyXAxisValueFormatter());
+       xAxis.setLabelRotationAngle(45);
+       xAxis.setAxisMinimum(1);
 
 
 
@@ -266,20 +271,25 @@ public class GraphActivity extends AppCompatActivity {
         yAxis3.setDrawGridLines(true);
 
         yAxis3.setAxisMaximum(yaxis+1);
-        yAxis3.setAxisMinimum(0f);
+        yAxis3.setAxisMinimum(1f);
         yAxis3.setAxisLineWidth(2);
 
 
 
         //      Chart Properties
         chart.getAxisRight().setEnabled(false);
-        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisLeft().setDrawGridLines(true);
         chart.setScaleEnabled(false);
-        chart.getLegend().setTextColor(Color.WHITE);
+        chart.getLegend().setTextColor(Color.parseColor("#823bd9"));
+        chart.setScaleXEnabled(true);
 
 
+
+//        chart.getOnChartGestureListener().onChartGestureStart(MotionEvent);
 
         LineDataSet set = new LineDataSet(tCaseData, description);
+        set.setDrawHighlightIndicators(false);
+
 
         set.setFillAlpha(30);
         set.setDrawCircles(false);
@@ -290,10 +300,12 @@ public class GraphActivity extends AppCompatActivity {
 
 
         ArrayList<ILineDataSet> dataSets=new ArrayList<>();
+
         dataSets.add(set);
 
 
         LineData data=new LineData(dataSets);
+        data.setDrawValues(false);
 
 
         chart.setData(data);
@@ -301,10 +313,18 @@ public class GraphActivity extends AppCompatActivity {
 //
         chart.getDescription().setEnabled(false);
 
+        chart.setPinchZoom(true);
 
         IMarker marker=new YourMakerView(getApplicationContext(),R.layout.contentview);
         chart.setMarker(marker);
         chart.animateX(900);
+
+
+
+
+
+
+
 
 
     }

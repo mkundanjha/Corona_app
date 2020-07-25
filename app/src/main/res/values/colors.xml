@@ -18,4 +18,5 @@
     <color name="softBlue">#4753f5</color>
     <color name="tabClolour">#243652</color>
     <color name="ttt">@drawable/gradient_background</color>
+    <color name="tableclr">@drawable/table_text_colour</color>
 </resources>

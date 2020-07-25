@@ -2,10 +2,12 @@ package com.example.coronawidget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -147,9 +149,6 @@ public class StateDataTableActivity extends AppCompatActivity {
                     TextView t1v = new TextView(this);
                     runAnimation(t1v,(4+i)*100);
                     t1v.setText(stateName);
-
-
-
                     t1v.setPadding(20,0,0,0);
                     t1v.setTextColor(Color.WHITE);
                     t1v.setGravity(Gravity.LEFT);
@@ -195,7 +194,7 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t2.setText("");
                     }
-                    t2.setTextColor(Color.BLACK);
+                    t2.setTextColor(Color.GRAY);
                     t2.setGravity(Gravity.RIGHT);
                     t2.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t2);
@@ -208,7 +207,7 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t3.setText("");
                     }
-                    t3.setTextColor(Color.BLACK);
+                    t3.setTextColor(Color.GRAY);
                     t3.setGravity(Gravity.RIGHT);
                     t3.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t3);
@@ -221,7 +220,7 @@ public class StateDataTableActivity extends AppCompatActivity {
                     {
                         t4.setText("");
                     }
-                    t4.setTextColor(Color.BLACK);
+                    t4.setTextColor(Color.GRAY);
                     t4.setGravity(Gravity.RIGHT);
                     t4.setBackground(getDrawable(R.drawable.lst_bottom_cell));
                     tableRow2.addView(t4);
@@ -297,6 +296,34 @@ public class StateDataTableActivity extends AppCompatActivity {
         t.clearAnimation();
 
         t.startAnimation(a);
+    }
+
+    public int getColour(Context context){
+        TypedValue typedValue=new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(android.R.attr.button,typedValue,true);
+//        TypedArray arr=this.obtainStyledAttributes(typedValue.data,new int[]{
+//                android.R.attr.textColor});
+//        int colour=arr.getColor(0,-1);
+        int colour=typedValue.data;
+
+        return colour;
+
+
+    }
+
+    public int getTextColor(Context context, int attrId) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(new int[] { attrId });
+        int textColor = typedArray.getColor(0, 0);
+        typedArray.recycle();
+        return textColor;
+    }
+
+    public ColorStateList getColourText(){
+        int[][] states=new int[][]{new int[]{R.style.AppTheme}, new int[]{R.style.LightMode}};
+        int[] color=new int[]{Color.WHITE,Color.BLACK};
+        ColorStateList list=new ColorStateList(states,color);
+        return list;
     }
 
 

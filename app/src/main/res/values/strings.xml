@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Corona Widget</string>
-    <string name="Heading">CORONAVIRUS DATA</string>
+    <string name="Heading">COVID HOUR</string>
     <string name="total_case">Confirmed</string>
 
 

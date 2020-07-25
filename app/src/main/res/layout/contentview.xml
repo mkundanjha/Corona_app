@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="100dp"
-                android:layout_height="60dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="85dp"
+                android:layout_height="50dp"
+                android:background="@drawable/marker2"
+                android:alpha="0.85"
+
 
         >
 
@@ -11,19 +15,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="7dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
+
 
 
             android:text=""
             android:fontFamily="@font/aquire_b"
             android:textSize="12dp"
-            android:textColor="@android:color/holo_green_dark"
+            android:textColor="@color/white"
             android:ellipsize="end"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:singleLine="true"/>
+
 
     <TextView
             android:id="@+id/tvContent2"
@@ -31,15 +32,15 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
 
-            android:layout_marginTop="7dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+
             android:text=""
             android:layout_below="@+id/tvContent"
             android:fontFamily="@font/aquire_b"
             android:textSize="12dp"
-            android:textColor="@android:color/holo_blue_light"
+            android:textColor="#1c1b1c"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
 </RelativeLayout>

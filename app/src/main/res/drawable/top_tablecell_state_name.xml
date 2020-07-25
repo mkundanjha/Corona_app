@@ -3,6 +3,6 @@
         android:shape="rectangle">
     <corners android:topLeftRadius="10dp"/>
     <padding android:left="10dp" android:right="10dp"/>
-    <solid android:color="#0d366b"/>
+    <solid android:color="?attr/tableHeaderColor2"/>
 
 </shape>

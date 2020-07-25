@@ -48,7 +48,7 @@ public class YourMakerView extends MarkerView {
 
 
 
-        tvContent2.setText("" + MainActivity.format((double)e.getY()*100000)+"       ");
+        tvContent2.setText("" + MainActivity.format((double)e.getY())+"       ");
         tvContent.setText("    "+newDate+"      ");
 
         // this will perform necessary layouting

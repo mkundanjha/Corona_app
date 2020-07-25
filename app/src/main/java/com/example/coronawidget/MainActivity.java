@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import java.security.PublicKey;
 import java.text.DecimalFormat;
 
 import java.util.*;
+
+import static com.example.coronawidget.R.style.LightMode;
 
 
 public class MainActivity<SharedPref> extends AppCompatActivity {
@@ -108,7 +111,7 @@ public class MainActivity<SharedPref> extends AppCompatActivity {
         if(sharedprep.loadNightModeState()==true){
             setTheme(R.style.AppTheme);
         }else {
-        setTheme(R.style.LightMode);
+        setTheme(LightMode);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -179,42 +182,43 @@ public class MainActivity<SharedPref> extends AppCompatActivity {
 
         if(CheckNetwork.isInternetAvailable(MainActivity.this)) //returns true if internet available
         {
-            fetch();
-            showGraph.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    goGraph();
-                }
-            });
-            showTable.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    goTable();
-                }
-            });
 
-            showCreator.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    builder.setMessage("Thank you for using our app!\nThis app is designed to show the live data of Coronavirus spread around the world.\nStay home and stay safe.\nLet's fight this pandemic together.\n\nDeveloper: Kundan Jha\nMail: kundanjha38@gmail.com\nPlease contact for any query!!\n\nSource:\ncovid19api.com\ncovid19india.org ")
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                }
-                            });
-                    AlertDialog alert=builder.create();
-                    alert.setTitle("App Info");
-                    alert.show();
-                }
-            });
-            showSearch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    goWorldActivity();
-                }
-            });
+                fetch();
+                showGraph.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goGraph();
+                    }
+                });
+                showTable.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goTable();
+                    }
+                });
+
+                showCreator.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder.setMessage("Thank you for using our app!\nThis app is designed to show the live data of Coronavirus spread around the world.\nStay home and stay safe.\nLet's fight this pandemic together.\n\nDeveloper: Kundan Jha\nMail: kundanjha38@gmail.com\nPlease contact for any query!!\n\nSource:\ncovid19api.com\ncovid19india.org ")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.setTitle("App Info");
+                        alert.show();
+                    }
+                });
+                showSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goWorldActivity();
+                    }
+                });
 
         }
         else
@@ -227,6 +231,18 @@ public class MainActivity<SharedPref> extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("txt",totalCaseView.getText().toString());
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        totalCaseView.setText(savedInstanceState.getString("txt"));
+    }
+
     public void restartApp () {
         Intent i = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(i);

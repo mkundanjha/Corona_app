@@ -2,6 +2,7 @@ package com.example.coronawidget;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.support.v4.app.INotificationSideChannel;
 import android.view.Gravity;
@@ -149,24 +150,32 @@ public class Main2Activity extends AppCompatActivity {
             TableRow tbrow0 = new TableRow(this);
             TextView tv0 = new TextView(this);
             tv0.setText("Countries");
+            tv0.setTypeface(Typeface.DEFAULT_BOLD);
+
             tv0.setTextColor(Color.parseColor("#b52f2f"));
             tv0.setTextSize(22);
             tv0.setPadding(30,0,0,0);
             tbrow0.addView(tv0);
             TextView tv1 = new TextView(this);
             tv1.setText("T.");
+            tv1.setTypeface(Typeface.DEFAULT_BOLD);
+
             tv1.setGravity(Gravity.CENTER);
             tv1.setTextSize(22);
             tv1.setTextColor(Color.parseColor("#b52f2f"));
             tbrow0.addView(tv1);
             TextView tv2 = new TextView(this);
             tv2.setText("R.");
+            tv2.setTypeface(Typeface.DEFAULT_BOLD);
+
             tv2.setTextSize(22);
             tv2.setGravity(Gravity.CENTER);
             tv2.setTextColor(Color.parseColor("#b52f2f"));
             tbrow0.addView(tv2);
             TextView tv3 = new TextView(this);
             tv3.setText("D.");
+            tv3.setTypeface(Typeface.DEFAULT_BOLD);
+
             tv3.setTextSize(22);
             tv3.setGravity(Gravity.CENTER);
 
@@ -253,21 +262,21 @@ public class Main2Activity extends AppCompatActivity {
                     TextView t2 = new TextView(this);
                     runAnimation(t2, (4 + i) * 100);
                     t2.setText("+ "+format(DCase));
-                    t2.setTextColor(Color.BLACK);
+                    t2.setTextColor(Color.GRAY);
                     t2.setGravity(Gravity.RIGHT);
                     t2.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t2);
                     TextView t3 = new TextView(this);
                     runAnimation(t3, (4 + i) * 100);
                     t3.setText("+ "+format(DRec));
-                    t3.setTextColor(Color.BLACK);
+                    t3.setTextColor(Color.GRAY);
                     t3.setGravity(Gravity.RIGHT);
                     t3.setBackground(getDrawable(R.drawable.cell_shape_bottom));
                     tableRow2.addView(t3);
                     TextView t4 = new TextView(this);
                     runAnimation(t4, (4 + i) * 100);
                     t4.setText("+ "+format(DDeath));
-                    t4.setTextColor(Color.BLACK);
+                    t4.setTextColor(Color.GRAY);
                     t4.setGravity(Gravity.RIGHT);
                     t4.setBackground(getDrawable(R.drawable.lst_bottom_cell));
                     tableRow2.addView(t4);
